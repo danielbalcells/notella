@@ -7,7 +7,7 @@ from django.db import models
 class Song(models.Model):
     artist = models.CharField(max_length=200)
     title = models.CharField(max_length=200)
-    mbid = models.CharField(max_length=50)
+    mbid = models.CharField(max_length=50, primary_key=True)
     album = models.CharField(max_length=200)
 
     def __str__(self):
