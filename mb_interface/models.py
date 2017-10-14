@@ -11,4 +11,5 @@ class Song(models.Model):
     album = models.CharField(max_length=200)
 
     def __str__(self):
-        return '"' + self.title + '", by ' + self.artist
+        render_string = '"' + self.title + '", by ' + self.artist
+        return render_string.encode('utf-8')
