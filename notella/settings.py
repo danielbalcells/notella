@@ -31,6 +31,7 @@ ALLOWED_HOSTS = ['ec2-52-25-177-224.us-west-2.compute.amazonaws.com']
 # Application definition
 
 INSTALLED_APPS = [
+    'mb_interface.apps.MbInterfaceConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
