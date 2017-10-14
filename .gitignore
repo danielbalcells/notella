@@ -1,0 +1,8 @@
+# Ignore python compiles
+*.pyc
+
+# Ignore vim saves
+*.swp
+
+# Ignore database
+db.sqlite3
