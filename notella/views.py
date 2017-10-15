@@ -22,5 +22,6 @@ def search(request):
 def song(request, mbid):
     song = get_object_or_404(Song, pk=mbid)
     links = recommend_from_song(song)
-    context = {'song': song, 'links': links}
+    youtube_url = song.get_youtube_url()
+    context = {'song': song, 'links': links, 'youtube_url': youtube_url}
     return render(request, 'song.html', context)
