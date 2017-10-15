@@ -1,1 +1,35 @@
-{{ song }}
+<html>
+    <body>
+        <div class="top-bar">
+            {% include "notella_header.html" %} 
+        </div>
+        <div class="main-stuff">
+            <div class="video-player">
+                <iframe id="ytplayer" type="text/html" width="640" height="360"
+                    src="{{ youtube_url }}"
+                    frameborder="0"></iframe>
+            </div>
+            <div class="link-list-container">
+                <h3>Recommendations for {{song.title}}</h3>
+                {% if links %}
+                <ul class="link-list">
+                    {% for link in links %}
+                    <li>
+                    <a class="song-link" 
+                        href="{% url 'song' link.to_song.mbid %}">
+                        {{ link.to_song.title }}, by {{link.to_song.artist}}
+                    </a>
+                    </br>
+                    <span class="link-description">
+                        {{ link.link_phrase}}
+                    </span>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p>No songs are available. Try a different query!</p>
+                {% endif %}
+            </div>
+        </div>
+    </body>
+</html>
