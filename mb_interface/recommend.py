@@ -20,10 +20,13 @@ def recommend_from_song(from_song, num_links=15):
                         )
     # For each credited artist, find connected songs and make links
     links = []
+    to_song_strings = []
     for from_artist in query_results['artist-list']:
         if 'artist-relation-list' in from_artist.keys():
-            links += get_links_from_connected_artist(from_song, from_artist,
-                max_links=num_links)
+            links, to_song_strings = get_links_from_connected_artist(
+                    from_song, from_artist,
+                    max_links=num_links,
+                    to_song_strings=to_song_strings)
     if len(links) > num_links:
         links = np.random.choice(links, num_links, replace=False)
     links = [l for l in links if 'Bad Unicode data' not in str(l)]
@@ -33,7 +36,8 @@ def recommend_from_song(from_song, num_links=15):
 # Makes a link for each song
 def get_links_from_connected_artist(from_song, artist_connections,
                                     songs_per_artist=5,
-                                    max_links=1000):
+                                    max_links=1000,
+                                    to_song_strings=[]):
     from_artist = artist_connections['name']
     links = []
     # Iterate connected artists, find songs for each one
@@ -51,19 +55,22 @@ def get_links_from_connected_artist(from_song, artist_connections,
         to_recordings = mbn.browse_recordings(artist=to_artist_id,
             limit=songs_per_artist)
         if to_recordings['recording-list']:
-            links += make_links(from_song, from_artist,
+            new_links, new_to_song_strings= make_links(from_song, from_artist,
                 to_artist, to_recordings['recording-list'],
-                conn_type, conn_direction)
+                conn_type, conn_direction, to_song_strings)
+            links += new_links
+            to_song_strings += new_to_song_strings
         if len(links) >= max_links:
             break
-    return links
+    return links, to_song_strings
 
 # Creates Link objects for a given set of parameters
 def make_links(from_song, from_artist, to_artist, to_recordings,
-                conn_type, conn_direction):
+                conn_type, conn_direction, to_song_strings):
     # Iterate destination recordings.
     # For each one, make a Song object and a Link with the specified parameters
     links = []
+    new_to_song_strings = []
     for to_recording in to_recordings:
         # Check if the song is already in the DB
         to_song_id = to_recording['id']
@@ -80,10 +87,12 @@ def make_links(from_song, from_artist, to_artist, to_recordings,
             link_phrase = from_artist + ' - ' + conn_type + ' - ' + to_artist
         else:
             link_phrase = to_artist + ' - ' + conn_type + ' - ' + from_artist
-
-        link = Link( from_song=from_song,
-                     to_song=to_song,
-                     link_phrase=link_phrase.decode('utf-8'))
-        links.append(link)
-    return links
+        # Only keep the link if we don't have one with the same name
+        if str(to_song) not in to_song_strings:
+            link = Link( from_song=from_song,
+                         to_song=to_song,
+                         link_phrase=link_phrase.decode('utf-8'))
+            links.append(link)
+            new_to_song_strings.append(str(to_song))
+    return links, new_to_song_strings
         
