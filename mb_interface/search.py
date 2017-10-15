@@ -5,10 +5,9 @@ from .models import Song
 mbn.set_useragent('Notella','dev')
 
 # Queries MB API for a given song title, returns a list of results
-def search_song_by_title(song_query, limit=10):
+def search_song_by_title(song_query, limit=20):
     try:
-        query_results = mbn.search_recordings(query=song_query, limit=limit,
-                status='official')
+        query_results = mbn.search_recordings(query=song_query, limit=limit)
         result_list = query_results['recording-list']
         song_list = []
         for result in result_list:
