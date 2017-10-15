@@ -1,5 +1,9 @@
 import musicbrainzngs as mbn
 import numpy as np
+import sys  
+
+reload(sys)  
+sys.setdefaultencoding('utf8')
 
 from .models import Song, Link
 
