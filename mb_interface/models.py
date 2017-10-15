@@ -16,6 +16,12 @@ class Song(models.Model):
         render_string = '"' + self.title + '", by ' + self.artist
         return render_string.encode('utf-8')
 
+    # Returns the URL to search for the song in YouTube
+    def get_youtube_url(self):
+        basestring = 'https://www.youtube.com/embed?listType=search&list='
+        query = (self.title + ' - ' + self.artist).replace(' ','%20')
+        return basestring+query
+
 # Basic model for a link between two songs. Contains FK relations to the two
 # songs and a string explaining the connection.
 class Link(models.Model):
