@@ -21,8 +21,9 @@ def recommend_from_song(from_song, num_links=15):
     # For each credited artist, find connected songs and make links
     links = []
     for from_artist in query_results['artist-list']:
-        links += get_links_from_connected_artist(from_song, from_artist,
-            max_links=num_links)
+        if 'artist-relation-list' in from_artist.keys():
+            links += get_links_from_connected_artist(from_song, from_artist,
+                max_links=num_links)
     if len(links) > num_links:
         links = np.random.choice(links, num_links, replace=False)
     links = [l for l in links if 'Bad Unicode data' not in str(l)]
