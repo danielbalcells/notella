@@ -20,6 +20,7 @@ def search_song_by_title(song_query, limit=10):
                         artist=artist,
                         mbid=mbid,
                         album=album)
+            song.save()
             song_list.append(song)
         return song_list
     except (mbn.ResponseError):
