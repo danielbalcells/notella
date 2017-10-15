@@ -22,8 +22,9 @@ def search_song_by_title(song_query, limit=20):
                         mbid=mbid,
                         #album=album)
                         album='None')
-            if str(song) not in song_string_list:
-                song_string_list.append(str(song))
+            song_string = str.lower(str(song))
+            if song_string not in song_string_list:
+                song_string_list.append(song_string)
                 song.save()
                 song_list.append(song)
         return song_list[:limit]

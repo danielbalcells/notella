@@ -88,11 +88,13 @@ def make_links(from_song, from_artist, to_artist, to_recordings,
         else:
             link_phrase = to_artist + ' - ' + conn_type + ' - ' + from_artist
         # Only keep the link if we don't have one with the same name
-        if str(to_song) not in to_song_strings:
+        song_string = str.lower(str(to_song))
+        if song_string not in to_song_strings and \
+                song_string not in new_to_song_strings:
             link = Link( from_song=from_song,
                          to_song=to_song,
                          link_phrase=link_phrase.decode('utf-8'))
             links.append(link)
-            new_to_song_strings.append(str(to_song))
+            new_to_song_strings.append(song_string)
     return links, new_to_song_strings
         
