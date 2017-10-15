@@ -17,10 +17,11 @@ def recommend_from_song(from_song, num_links=15):
     # For each credited artist, find connected songs and make links
     links = []
     for from_artist in query_results['artist-list']:
-        links.append(get_links_from_connected_artist(from_song, from_artist,
-            max_links=num_links))
+        links += get_links_from_connected_artist(from_song, from_artist,
+            max_links=num_links)
     if len(links) > num_links:
         links = np.random.choice(links, num_links, replace=False)
+    links = [l for l in links if 'Bad Unicode data' not in str(l)]
     return links
 
 # Finds a few songs for each artist connected to from_artist.
@@ -65,8 +66,8 @@ def make_links(from_song, from_artist, to_artist, to_recordings,
         if existing_song:
             to_song = existing_song[0]
         else:
-            to_song = Song(title=to_recording['title'].encode('utf-8'),
-                        artist=to_artist.encode('utf-8'),
+            to_song = Song(title=to_recording['title'].decode('utf-8'),
+                        artist=to_artist.decode('utf-8'),
                         mbid=to_recording['id']
                         )
             to_song.save()
@@ -77,7 +78,7 @@ def make_links(from_song, from_artist, to_artist, to_recordings,
 
         link = Link( from_song=from_song,
                      to_song=to_song,
-                     link_phrase=link_phrase.encode('utf-8'))
+                     link_phrase=link_phrase.decode('utf-8'))
         links.append(link)
     return links
         
