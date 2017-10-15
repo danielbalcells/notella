@@ -1,6 +1,8 @@
 <div class="title">
 	{% load static %}
-	<img class="notella-logo" src="{% static 'img/notella.png' %}">
+    <a href="/">
+        <img class="notella-logo" src="{% static 'img/notella.png' %}">
+    </a>
 </div>
 <div class="header-search-box">
     <form action="{% url 'search' %}" method="get">
