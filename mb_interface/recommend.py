@@ -65,8 +65,8 @@ def make_links(from_song, from_artist, to_artist, to_recordings,
         if existing_song:
             to_song = existing_song[0]
         else:
-            to_song = Song(title=to_recording['title'],
-                        artist=to_artist,
+            to_song = Song(title=to_recording['title'].encode('utf-8'),
+                        artist=to_artist.encode('utf-8'),
                         mbid=to_recording['id']
                         )
             to_song.save()
@@ -77,7 +77,7 @@ def make_links(from_song, from_artist, to_artist, to_recordings,
 
         link = Link( from_song=from_song,
                      to_song=to_song,
-                     link_phrase=link_phrase)
+                     link_phrase=link_phrase.encode('utf-8'))
         links.append(link)
     return links
         
