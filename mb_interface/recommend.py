@@ -17,7 +17,8 @@ def recommend_from_song(from_song, num_links=15):
     # For each credited artist, find connected songs and make links
     links = []
     for from_artist in query_results['artist-list']:
-        links.append(get_links_from_connected_artist(from_song, from_artist))
+        links.append(get_links_from_connected_artist(from_song, from_artist,
+            max_links=num_links))
     if len(links) > num_links:
         links = np.random.choice(links, num_links, replace=False)
     return links
@@ -25,11 +26,15 @@ def recommend_from_song(from_song, num_links=15):
 # Finds a few songs for each artist connected to from_artist.
 # Makes a link for each song
 def get_links_from_connected_artist(from_song, artist_connections,
-                                    songs_per_artist=5):
+                                    songs_per_artist=5,
+                                    max_links=1000):
     from_artist = artist_connections['name']
     links = []
     # Iterate connected artists, find songs for each one
-    for connected_artist in artist_connections['artist-relation-list']:
+    # Randomize order of artists, stop when we have enough links
+    randomized_connections = np.random.permutation(
+        artist_connections['artist-relation-list'])
+    for connected_artist in randomized_connections:
         conn_type = connected_artist['type']
         if 'direction' in connected_artist.keys():
             conn_direction = connected_artist['direction']
@@ -43,6 +48,8 @@ def get_links_from_connected_artist(from_song, artist_connections,
             links += make_links(from_song, from_artist,
                 to_artist, to_recordings['recording-list'],
                 conn_type, conn_direction)
+        if len(links) >= max_links:
+            break
     return links
 
 # Creates Link objects for a given set of parameters
