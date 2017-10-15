@@ -16,11 +16,12 @@ def search_song_by_title(song_query, limit=20):
             title = result['title']
             artist = result['artist-credit-phrase']
             mbid = result['id']
-            album = result['release-list'][0]['title']
+            #album = result['release-list'][0]['title']
             song = Song(title=title,
                         artist=artist,
                         mbid=mbid,
-                        album=album)
+                        #album=album)
+                        album='None')
             if str(song) not in song_string_list:
                 song_string_list.append(str(song))
                 song.save()
