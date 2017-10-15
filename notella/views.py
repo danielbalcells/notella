@@ -15,9 +15,12 @@ def index(request):
 
 def search(request):
     query = request.GET.get('query')
-    song_list = search_song_by_title(query)
-    context = { 'query': query, 'song_list': song_list}
-    return render(request, 'search.html', context)
+    if 'cacau al rei' in str.lower(str(query)):
+        return render(request, 'cacau.html')
+    else:
+        song_list = search_song_by_title(query)
+        context = { 'query': query, 'song_list': song_list}
+        return render(request, 'search.html', context)
 
 def song(request, mbid):
     song = get_object_or_404(Song, pk=mbid)
