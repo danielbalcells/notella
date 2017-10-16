@@ -8,6 +8,7 @@
             {% include "notella_header.html" %}
         </div>
         <div class="main-stuff">
+            {% if query %}
             <div class="song-list">
                 {% if song_list %}
                     <ul>
@@ -19,6 +20,9 @@
                     <p>No songs are available.</p>
                 {% endif %}
             </div>
+            {% else %}
+            <p>Please enter a song title to search for.</p>
+            {% endif %}
         </div>
     </body>
 </html>
